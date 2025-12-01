@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "BrainF__k-Parser"
+name = "BrainFk-Interpreter"
 version = "0.1.0"

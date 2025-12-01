@@ -1,10 +1,14 @@
 #![warn(
     clippy::all,
-    clippy::restriction,
+    // clippy::restriction,
     clippy::pedantic,
     clippy::nursery,
     clippy::cargo
 )]
+
+mod memory;
+mod program;
+mod text_to_bf;
 
 use std::io;
 
