@@ -6,6 +6,7 @@
     clippy::cargo
 )]
 
+mod build_bracket_map;
 mod memory;
 mod program;
 mod text_to_bf;

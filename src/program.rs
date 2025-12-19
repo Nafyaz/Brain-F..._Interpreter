@@ -1,10 +1,17 @@
+use crate::build_bracket_map::build_bracket_map;
 use std::collections::HashMap;
 
 #[derive(Debug)]
-struct Program {
-    code: Vec<char>,
-    left_bracket_map: HashMap<char, char>,
-    right_bracket_map: HashMap<char, char>,
+struct Program<'a> {
+    code: &'a str,
+    bracket_map: HashMap<usize, usize>,
 }
 
-impl Program {}
+impl<'a> Program<'a> {
+    fn new(code: &'a str) -> Result<Self, String> {
+        Ok(Self {
+            code,
+            bracket_map: build_bracket_map(code)?,
+        })
+    }
+}
