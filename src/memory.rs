@@ -1,5 +1,5 @@
 #[derive(Debug)]
-struct Memory {
+pub struct Memory {
     memory: Vec<u8>,
     pointer: usize,
 }
