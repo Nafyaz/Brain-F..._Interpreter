@@ -6,29 +6,51 @@
     clippy::cargo
 )]
 
-mod build_bracket_map;
 mod memory;
 mod program;
-mod text_to_bf;
+mod util;
 
+use crate::memory::Memory;
+use crate::program::Program;
 use std::io;
 
 fn main() {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
+    let mut source_in = String::new();
+    io::stdin().read_line(&mut source_in).unwrap();
 
-    for c in input.chars() {
-        let n = c as u32;
-        let sq_low = n.isqrt();
-        let sq_high = n / sq_low;
-        let rem = n % (sq_low * sq_high);
+    let source = source_in.trim();
+    let memory = match Memory::new(128) {
+        Ok(m) => m,
+        Err(e) => {
+            eprintln!("Error creating memory: {e}");
+            return;
+        }
+    };
 
-        let answer = "+".repeat(sq_low as usize)
-            + "[>"
-            + "+".repeat(sq_high as usize).as_str()
-            + "<-]>"
-            + "+".repeat(rem as usize).as_str()
-            + ".[-]<";
-        println!("{}", answer);
+    let mut program = match Program::new(&source, memory) {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("Error creating program: {e}");
+            return;
+        }
+    };
+
+    loop {
+        match program.execute() {
+            Ok(has_ended) => {
+                if has_ended {
+                    break;
+                }
+            }
+            Err(e) => {
+                eprintln!("Error executing program: {e}");
+                return;
+            }
+        }
     }
+
+    println!(
+        "\n\nProgram ended. Total execution count: {}",
+        program.execution_count
+    );
 }
