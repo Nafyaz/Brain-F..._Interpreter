@@ -3,7 +3,7 @@ use std::io::Read;
 
 #[derive(Debug)]
 pub struct Memory {
-    memory: Vec<u8>,
+    tape: Vec<u8>,
     pointer: usize,
 }
 
@@ -14,17 +14,17 @@ impl Memory {
         }
 
         Ok(Self {
-            memory: vec![0; size],
+            tape: vec![0; size],
             pointer: 0,
         })
     }
 
     pub fn read(&self) -> u8 {
-        self.memory[self.pointer]
+        self.tape[self.pointer]
     }
 
     pub fn move_right(&mut self) -> Result<(), String> {
-        if self.pointer == self.memory.len() - 1 {
+        if self.pointer == self.tape.len() - 1 {
             return Err("Insufficient memory. Cannot move right.".into());
         }
 
@@ -43,15 +43,15 @@ impl Memory {
     }
 
     pub fn add(&mut self) {
-        self.memory[self.pointer] = self.memory[self.pointer].wrapping_add(1);
+        self.tape[self.pointer] = self.tape[self.pointer].wrapping_add(1);
     }
 
     pub fn subtract(&mut self) {
-        self.memory[self.pointer] = self.memory[self.pointer].wrapping_sub(1);
+        self.tape[self.pointer] = self.tape[self.pointer].wrapping_sub(1);
     }
 
     pub fn output(&mut self) {
-        print!("{}", self.memory[self.pointer] as char);
+        print!("{}", self.tape[self.pointer] as char);
     }
 
     pub fn input(&mut self) -> Result<(), String> {
@@ -59,7 +59,7 @@ impl Memory {
         io::stdin()
             .read_exact(&mut buffer)
             .map_err(|e| e.to_string())?;
-        self.memory[self.pointer] = buffer[0];
+        self.tape[self.pointer] = buffer[0];
 
         Ok(())
     }
